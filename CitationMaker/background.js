@@ -62,7 +62,7 @@ parseAuthor = function(author){
         return "";
     const HTMLTag = /(<([^>]+)>)/ig;
     author = author.replace(HTMLTag, "");//delete any stray HTML tags
-    const byStr = /.*[^\Wby\W]*\Wby\W/i;
+    const byStr = /.*[^\Wby\W]*\Wby\W|^([^by\W]*by\W)/i;
     author = author.replace(byStr,"");//replaces anything before by with the empty string.
     const authors = author.split(/and\s|,/);// splits names
     //alert(authors);
@@ -84,7 +84,7 @@ parseAuthor = function(author){
     }
     var ret;
     if(formatedAuthors.length > 2){
-        ret = formatedAuthors[0]+" et al.";
+        ret = formatedAuthors[0]+" et al";
     }else{
         formatedAuthors.sort();//sorts the authors.
         ret = formatedAuthors.join(" and ");

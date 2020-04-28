@@ -1,0 +1,46 @@
+/*TODO
+1. find good font
+2. make it look better
+ */
+body{
+    height: 400px;
+    width: 300px;
+    max-height: 400px;
+    max-width: 300px;
+    background-color: ghostwhite;
+}
+li{
+    list-style-type: none;
+}
+
+h1{
+    color: ghostwhite;
+}
+.citationSelection{
+    width: 60px;
+    height: 40px;
+    background-color: dimgrey;
+}
+.citationSelection:hover{
+    background-color: dimgray;
+    opacity: 0.7;
+}
+
+#titleDiv{
+   background-color: black;
+    width: 97vw;//probably wrong
+    height: 7vw;
+    padding: 0px;
+    border: 0px;
+    margin: 0px;
+    overflow: hidden;
+}
+#citeFormats{
+    display: inline-block;
+    width: 100vw;
+    padding: 0px 20px;
+    margin: 0px;
+}
+#copyInstr{
+    font-size: 8px;
+}

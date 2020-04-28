@@ -3,24 +3,28 @@
 <head>
 
     <meta charset="UTF-8">
-    <title>Test</title>
-    <style>
-    button {
-    height: 30px;
-    width: 30px;
-    outline: none;
-    }
-    </style>
+    <title>CitationMaker</title>
+    <link rel="stylesheet" type = "text/css" href = "popup.css">
 </head>
 <body>
     <Title>CitationMaker</Title>
+    <div id = "titleDiv">
+        <h1 id = "title">CitationMaker</h1>
+    </div>
     <div>
-        <button id="MLA" class = "citationSelection">MLA</button>
-        <script src = "popup.js"></script>
+        <ul id = "citeFormats">
+            <li>
+                <button id="MLA" class = "citationSelection">MLA</button>
+                <!--<button id="IEEE" class = "citationSelection">IEEE</button>
+                <button id="BibTex" class = "citationSelection">BibTex</button>-->
+                <script src = "popup.js"></script>
+            </li>
+        </ul>
     </div>
    <div>
-       <H2>Citation</H2>
+       <H2>Citation:</H2>
        <p id="citeDisp"></p>
+       <p id = "copyInstr">COPY TO CLIPBOARD (Command + C)</p>
    </div>
 
 </body>
