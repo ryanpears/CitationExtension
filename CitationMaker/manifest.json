@@ -2,7 +2,7 @@
   "name": "Citation Maker",
   "version": "1.0",
   "description": "In progress citation maker",
-  "permissions": ["tabs","activeTab","debugger"],
+  "permissions": ["tabs","activeTab","debugger","clipboardWrite"],
   "background": {
     "scripts": ["background.js"]
   },

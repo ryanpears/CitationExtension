@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="231ba804-31aa-4da3-883e-60c832654812" name="Default Changelist" comment="" />
+    <list default="true" id="231ba804-31aa-4da3-883e-60c832654812" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CitationMaker/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CitationMaker/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/CitationMaker/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CitationMaker/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/CitationMaker/background.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CitationMaker/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/CitationMaker/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CitationMaker/popup.css" beforeDir="false" afterPath="$PROJECT_DIR$/CitationMaker/popup.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CitationMaker/popup.html" beforeDir="false" afterPath="$PROJECT_DIR$/CitationMaker/popup.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,6 +23,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1VfQtBaCGhIJvyuGfD7NrfPI4tg" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -22,13 +34,31 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/ScreenShot" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/ScreenShot" />
     </key>
+  </component>
+  <component name="RunManager" selected="JavaScript Debug.popup.html">
+    <configuration name="index.html" type="JavascriptDebugType" nameIsGenerated="true" uri="http://localhost:11000/CitionExtension/CitationMaker/index.html" useFirstLineBreakpoints="true">
+      <method v="2" />
+    </configuration>
+    <configuration name="popup.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CitationExtension/CitationMaker/popup.html" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="JavaScript Debug.index.html" />
+      <item itemvalue="JavaScript Debug.popup.html" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JavaScript Debug.popup.html" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="ServiceViewManager">
     <option name="viewStates">
@@ -54,10 +84,37 @@
       <updated>1577641881690</updated>
       <workItem from="1577641883086" duration="681000" />
       <workItem from="1587748439100" duration="3000" />
+      <workItem from="1588877959994" duration="3556000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="579" y="192" key="#Web_Browsers" timestamp="1588879171860">
+      <screen x="0" y="23" width="1680" height="965" />
+    </state>
+    <state x="579" y="192" key="#Web_Browsers/0.23.1680.965@0.23.1680.965" timestamp="1588879171860" />
+    <state x="444" y="189" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1588879546421">
+      <screen x="0" y="23" width="1680" height="965" />
+    </state>
+    <state x="444" y="189" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1680.965@0.23.1680.965" timestamp="1588879546421" />
+    <state width="1379" height="303" key="GridCell.Tab.0.bottom" timestamp="1588879592763">
+      <screen x="0" y="23" width="1680" height="966" />
+    </state>
+    <state width="1379" height="303" key="GridCell.Tab.0.bottom/0.23.1680.966@0.23.1680.966" timestamp="1588879592763" />
+    <state width="1379" height="303" key="GridCell.Tab.0.center" timestamp="1588879592690">
+      <screen x="0" y="23" width="1680" height="966" />
+    </state>
+    <state width="1379" height="303" key="GridCell.Tab.0.center/0.23.1680.966@0.23.1680.966" timestamp="1588879592690" />
+    <state width="1379" height="303" key="GridCell.Tab.0.left" timestamp="1588879592518">
+      <screen x="0" y="23" width="1680" height="966" />
+    </state>
+    <state width="1379" height="303" key="GridCell.Tab.0.left/0.23.1680.966@0.23.1680.966" timestamp="1588879592518" />
+    <state width="1379" height="303" key="GridCell.Tab.0.right" timestamp="1588879592731">
+      <screen x="0" y="23" width="1680" height="966" />
+    </state>
+    <state width="1379" height="303" key="GridCell.Tab.0.right/0.23.1680.966@0.23.1680.966" timestamp="1588879592731" />
   </component>
 </project>

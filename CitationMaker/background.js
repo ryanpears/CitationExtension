@@ -12,9 +12,10 @@ chrome.runtime.onMessage.addListener(async function(request,sender, sendResponse
 makeMLACitation = function(){
     let todaysDate = new Date();
     let url = window.location.href;
-    let title = document.title;
-    let author_tag=document.querySelector("[name=author]");
-    let author=author_tag==(null||undefined)?"":author_tag.content;
+    let titleTag = document.title;
+    let title = titleTag==(null||undefined)?"":titleTag;
+    let authorTag=document.querySelector("[name=author]");
+    let author=authorTag==(null||undefined)?"":authorTag.content;
     let publishedDate = new Date(document.lastModified);
 
     const formatAuthor = parseAuthor(author);
@@ -30,6 +31,7 @@ makeMLACitation = function(){
         MLA += formatPublishedDate+ ", "
 
     MLA += url + ".";
+    copyFormatted(MLA);//hopefully this works
     return MLA;
 }
 
@@ -90,4 +92,56 @@ parseAuthor = function(author){
         ret = formatedAuthors.join(" and ");
     }
     return ret;
+}
+
+/**
+ * creates a dummy area of the page and then copies it to the clipboard
+ * found this on https://stackoverflow.com/questions/34191780/javascript-copy-string-to-clipboard-as-text-html
+ * @param html
+ */
+function copyFormatted (html) {
+    // Create container for the HTML
+    // [1]
+    var container = document.createElement('div')
+    container.innerHTML = html
+
+    // Hide element
+    // [2]
+    container.style.position = 'fixed'
+    container.style.pointerEvents = 'none'
+    container.style.opacity = 0
+
+    // Detect all style sheets of the page
+    var activeSheets = Array.prototype.slice.call(document.styleSheets)
+        .filter(function (sheet) {
+            return !sheet.disabled
+        })
+
+    // Mount the container to the DOM to make `contentWindow` available
+    // [3]
+    document.body.appendChild(container)
+
+    // Copy to clipboard
+    // [4]
+    window.getSelection().removeAllRanges()
+
+    var range = document.createRange()
+    range.selectNode(container)
+    window.getSelection().addRange(range)
+
+    // [5.1]
+    document.execCommand('copy')
+
+    // [5.2]
+    for (var i = 0; i < activeSheets.length; i++) activeSheets[i].disabled = true
+
+    // [5.3]
+    document.execCommand('copy')
+
+    // [5.4]
+    for (var i = 0; i < activeSheets.length; i++) activeSheets[i].disabled = false
+
+    // Remove the container
+    // [6]
+    document.body.removeChild(container)
 }
