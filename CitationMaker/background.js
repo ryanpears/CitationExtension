@@ -1,8 +1,22 @@
+/**
+ * this opens a one time connection to popup.js
+ */
 chrome.runtime.onMessage.addListener(async function(request,sender, sendResponse){
     //can add switchstatement for the request to support mulitple formats
     const data = makeMLACitation();
     sendResponse({citation: data});
     return true; //tells chrome this is async
+});
+
+/**
+ * this opens up a long lived connection to popup.js
+ */
+chrome.extension.onConnect.addListener(function(port){
+    alert("in background.js connected");
+    port.onMessage.addListener(function(msg){
+        alert("message from popup is "+msg);
+        port.postMessage("hi popup.js");
+    });
 });
 
 /**
