@@ -12,10 +12,16 @@ chrome.runtime.onMessage.addListener(async function(request,sender, sendResponse
  * this opens up a long lived connection to popup.js
  */
 chrome.extension.onConnect.addListener(function(port){
-    alert("in background.js connected");
+    //alert("in background.js connected");
     port.onMessage.addListener(function(msg){
-        alert("message from popup is "+msg);
-        port.postMessage("hi popup.js");
+       switch(msg.command){
+           case "init":
+               port.postMessage("making inital");
+               break;
+           case "change":
+               port.postMessage("changed shit");
+               break;
+       }
     });
 });
 

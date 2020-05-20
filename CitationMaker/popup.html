@@ -27,32 +27,34 @@
        <p id = "copyInstr">AUTOMATICALLY COPIED TO CLIPBOARD (press command/ctrl + C to paste)</p>
    </div>
 
-    <div id="manualDiv">
-        <button id="manual" class="extras">Manual Entry</button>
-        <script src = "popup.js"></script>
-    </div>
-    <div id = "manualEntries">
-        <div>
-            <label id = "titleLabel" class = "manualLabel" >title</label>
-            <input id = "titleInput" class = "manualInput" type = "text">
+    <div id="manualSection">
+        <div id="manualDiv">
+            <button id="manual" class="extras">Manual Entry</button>
+            <script src = "popup.js"></script>
         </div>
-        <div>
-            <label id = "authorLabel" class = "manualLabel">author</label>
-            <input id = "authorInput" class = "manualInput" type = "text">
+        <div id = "manualEntries">
+            <div>
+                <label id = "titleLabel" class = "manualLabel" >title</label>
+                <input id = "titleInput" class = "manualInput" type = "text">
+            </div>
+            <div>
+                <label id = "authorLabel" class = "manualLabel">author</label>
+                <input id = "authorInput" class = "manualInput" type = "text">
+            </div>
+            <div>
+                <label id = "publisherLabel" class = "manualLabel" type = "text">publisher</label>
+                <input id = "publisherInput" class = "manualInput" type = "text">
+            </div>
+            <div>
+                <label id = "todaysDateLabel" class = "manualLabel">todays date</label>
+                <input id = "todaysDateInput" class = "manualInput" type = "date">
+            </div>
+            <div>
+                <label id = "publishedDateLabel" class = "manualLabel" >published date</label>
+                <input id = "publishedDateInput" class = "manualInput" type = "date">
+            </div>
+            <!--maybe add a section to add the url and an annotation-->
         </div>
-        <div>
-            <label id = "publisherLabel" class = "manualLabel" type = "text">publisher</label>
-            <input id = "publisherInput" class = "manualInput" type = "text">
-        </div>
-        <div>
-            <label id = "todaysDateLabel" class = "manualLabel">todays date</label>
-            <input id = "todaysDateInput" class = "manualInput" type = "date">
-        </div>
-        <div>
-            <label id = "publishedDateLabel" class = "manualLabel" >published date</label>
-            <input id = "publishedDateInput" class = "manualInput" type = "date">
-        </div>
-        <!--maybe add a section to add the url and an annotation-->
     </div>
 </body>
 </html>

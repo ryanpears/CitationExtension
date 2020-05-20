@@ -19,9 +19,10 @@ document.addEventListener('DOMContentLoaded', function(){//waits for everything 
     };
 
     buttonManual.onclick = function(){
+
         //hides the manual entries.
         if(manualEntry.style.display != "none"){
-            manualEntry.style.display = "none";//this may change not sure the best one yet grid or table could work
+            manualEntry.style.display = "none";
         }else{
             manualEntry.style.display = "block";//this may change not sure the best one yet grid or table could work
         }
@@ -37,10 +38,10 @@ document.addEventListener('DOMContentLoaded', function(){//waits for everything 
          * coninuosly updates.
          */
         //opens the connection to the background.
-        let port = chrome.extension.connect({name:"test"});
-        port.postMessage("Hello Background");
+        let port = chrome.extension.connect({name:"manual"});
+        port.postMessage({command: "init"});
         port.onMessage.addListener(function(msg){
-            alert("in the popup"+msg);
+            alert("in the popup "+msg);
         });
     };
 
