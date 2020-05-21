@@ -3,7 +3,8 @@
  */
 chrome.runtime.onMessage.addListener(async function(request,sender, sendResponse){
     //can add switchstatement for the request to support mulitple formats
-    const data = makeMLACitation();
+    let rawPageData = getPageData();
+    const data = makeMLACitation(rawPageData);
     sendResponse({citation: data});
     return true; //tells chrome this is async
 });
@@ -16,6 +17,7 @@ chrome.extension.onConnect.addListener(function(port){
     port.onMessage.addListener(function(msg){
        switch(msg.command){
            case "init":
+               let rawPageData = getPageData();
                port.postMessage("making inital");
                break;
            case "change":
@@ -29,30 +31,52 @@ chrome.extension.onConnect.addListener(function(port){
  * collects data from current tab and creates MLA citation
  * @returns {string}
  */
-makeMLACitation = function(){
-    let todaysDate = new Date();
+function makeMLACitation(rawPageData){//CHANGE TO MAKE PASS IN A JSON OF THE RAW DATA
+    /*let todaysDate = new Date();
     let url = window.location.href;
     let titleTag = document.title;
     let title = titleTag==(null||undefined)?"":titleTag;
     let authorTag=document.querySelector("[name=author]");
     let author=authorTag==(null||undefined)?"":authorTag.content;
-    let publishedDate = new Date(document.lastModified);
+    let publishedDate = new Date(document.lastModified);*/
+    //let rawPageData = getPageData();
 
-    const formatAuthor = parseAuthor(author);
-    const formatToday = dateFormat(todaysDate);
-    const formatPublishedDate = dateFormat(publishedDate);
+    const formatAuthor = parseAuthor(rawPageData.Author);
+    const formatToday = dateFormat(rawPageData.TodaysDate);
+    const formatPublishedDate = dateFormat(rawPageData.PublishedDate);
 
     let MLA = "";
     if(formatAuthor != "")
         MLA += formatAuthor+". ";
-    if(title != (null||undefined||""))
-        MLA += title.italics() + ". ";
+    if(rawPageData.Title != (null||undefined||""))
+        MLA += rawPageData.Title.italics() + ". ";
     if(formatPublishedDate != (null||undefined||""))
         MLA += formatPublishedDate+ ", "
 
-    MLA += url + ".";
-    copyFormatted(MLA);//hopefully this works
+    MLA += rawPageData.Url + ".";
+    copyFormatted(MLA);
     return MLA;
+}
+
+/**
+ * gets the data from the webpage unfomated.
+ * @returns {{TodaysDate: *, Author: *, Title: (string|string), PublishedDate: *, Url: string}}
+ */
+function getPageData(){
+    const todaysDate = new Date();
+    const url = window.location.href;
+    const titleTag = document.title;
+    const title = titleTag==(null||undefined)?"":titleTag;
+    const authorTag=document.querySelector("[name=author]");
+    const author=authorTag==(null||undefined)?"":authorTag.content;
+    const publishedDate = new Date(document.lastModified);
+
+
+    return {Author : author,
+        Title: title,
+        TodaysDate: todaysDate,
+        PublishedDate: publishedDate,
+        Url : url};
 }
 
 /**
@@ -60,7 +84,7 @@ makeMLACitation = function(){
  * @param date
  * @returns {*}
  */
-dateFormat = function(date){
+function dateFormat(date){
     if(date == (null||undefined))
         return "";
     let month, year, day, formatedDate;
@@ -79,7 +103,7 @@ dateFormat = function(date){
  * @param author
  * @returns {*}
  */
-parseAuthor = function(author){
+function parseAuthor(author){
     if(author == undefined || author == null)//sometimes there is an author tag but no content.
         return "";
     const HTMLTag = /(<([^>]+)>)/ig;
