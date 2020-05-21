@@ -38,11 +38,14 @@ document.addEventListener('DOMContentLoaded', function(){//waits for everything 
          * coninuosly updates.
          */
         //opens the connection to the background.
-        let port = chrome.extension.connect({name:"manual"});
-        port.postMessage({command: "init"});
-        port.onMessage.addListener(function(msg){
-            alert("in the popup "+msg);
-        });
+        chrome.tabs.query({currentWindow: true, active: true},
+            function(tabs) {//callback after getting tab
+                let port = chrome.tabs.connect(tabs[0].id);
+                port.postMessage({command: "init"});
+                port.onMessage.addListener(function (msg) {
+                    displayResponse(msg);
+                });
+            });
     };
 
 
@@ -55,6 +58,11 @@ document.addEventListener('DOMContentLoaded', function(){//waits for everything 
  * displays the citation
  * @param response
  */
-displayResponse = function(response){
-    document.getElementById("citeDisp").innerHTML = response.citation;
+function displayResponse(response){
+    document.getElementById("citeDisp").innerHTML = response.Citation;
+    //displays the data if it exsists.
+    if(response.hasOwnProperty("data")){
+        document.getElementById("titleInput").value = response.data.Title;
+    }
 };
+

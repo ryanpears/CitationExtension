@@ -5,7 +5,7 @@ chrome.runtime.onMessage.addListener(async function(request,sender, sendResponse
     //can add switchstatement for the request to support mulitple formats
     let rawPageData = getPageData();
     const data = makeMLACitation(rawPageData);
-    sendResponse({citation: data});
+    sendResponse({Citation: data});
     return true; //tells chrome this is async
 });
 
@@ -16,9 +16,12 @@ chrome.extension.onConnect.addListener(function(port){
     //alert("in background.js connected");
     port.onMessage.addListener(function(msg){
        switch(msg.command){
-           case "init":
+           case "init"://I THINK I NEED TO SPECFY A TAB
+               alert("in the init case");
                let rawPageData = getPageData();
-               port.postMessage("making inital");
+               const citation = makeMLACitation(rawPageData);
+               const citeAndData = {Citation: citation, data: rawPageData};
+               port.postMessage(citeAndData);
                break;
            case "change":
                port.postMessage("changed shit");
