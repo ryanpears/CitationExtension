@@ -15,16 +15,21 @@ chrome.runtime.onMessage.addListener(async function(request,sender, sendResponse
 chrome.extension.onConnect.addListener(function(port){
     //alert("in background.js connected");
     port.onMessage.addListener(function(msg){
+        let rawPageData;
+        let citation;
        switch(msg.command){
-           case "init"://I THINK I NEED TO SPECFY A TAB
-               alert("in the init case");
-               let rawPageData = getPageData();
-               const citation = makeMLACitation(rawPageData);
+           case "init":
+               rawPageData = getPageData();
+               citation = makeMLACitation(rawPageData);
                const citeAndData = {Citation: citation, data: rawPageData};
                port.postMessage(citeAndData);
                break;
            case "change":
-               port.postMessage("changed shit");
+               //rawPageData = getPageData();//wrong will change.
+               //uses the input boxes values only.
+
+               citation = makeMLACitation(rawPageData);
+               port.postMessage({Citation: citation});//shouldn't reupdate feilds
                break;
        }
     });

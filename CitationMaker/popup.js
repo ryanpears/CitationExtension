@@ -51,6 +51,8 @@ document.addEventListener('DOMContentLoaded', function(){//waits for everything 
 
 
 
+
+
 },false);
 
 
@@ -62,7 +64,12 @@ function displayResponse(response){
     document.getElementById("citeDisp").innerHTML = response.Citation;
     //displays the data if it exsists.
     if(response.hasOwnProperty("data")){
+        //note: publisher isn't in here since I don't know how to find it from the webpage.
         document.getElementById("titleInput").value = response.data.Title;
+        document.getElementById("authorInput").value = response.data.Author;
+        //these 2 don't work
+        document.getElementById("todaysDateInput").value = response.data.TodaysDate;
+        document.getElementById("publishedDateInput").value = response.data.PublishedDate;
     }
 };
 
