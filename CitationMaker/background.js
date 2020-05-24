@@ -80,7 +80,7 @@ function getPageData(){
     const publishedDate = new Date(document.lastModified);
 
 
-    return {Author : author,
+    return {Author: author,
         Title: title,
         TodaysDate: todaysDate,
         PublishedDate: publishedDate,
