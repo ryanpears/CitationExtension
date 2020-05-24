@@ -1,10 +1,11 @@
 $(function(){//waits for everything to load
-    let buttonMla = $('#MLA');
-    let buttonManual = $('#manual');
-    let manualEntry = document.getElementById("manualEntries");//the entry boxes
+    let buttonMla = $("#MLA");
+    let buttonManual = $("#manual");
+    //let manualEntry = document.getElementById("manualEntries");//the entry boxes
+    let manualEntry = $("#manualEntries");
 
-    manualEntry.style.display = "none";//default to hidden
-
+    //manualEntry.style.display = "none";//default to hidden
+    manualEntry.css("display", "none");
     buttonMla.on("click",function(){
             //alert("this still works");
             chrome.tabs.query({currentWindow: true, active: true},
@@ -16,14 +17,13 @@ $(function(){//waits for everything to load
         });
     //event not trigger anymore.
      buttonManual.on("click", function() {
-        alert("event fired");
+
         //hides the manual entries.
-        if (manualEntry.style.display != "none") {
-            alert("getting rid of manual stuff");
-            manualEntry.style.display = "none";
+        if (manualEntry.css("display") != "none") {
+            manualEntry.css("display", "none");
         } else {
-            alert("displaying the manual stuff now");
-            manualEntry.style.display = "block";//this may change not sure the best one yet grid or table could work
+            //this may change not sure the best one yet grid or table could work
+            manualEntry.css("display", "block");
         }
 
         /*TODO somehow needs to real time update what the citation looks like.
@@ -56,15 +56,15 @@ $(function(){//waits for everything to load
  * @param response
  */
 function displayResponse(response){
-    document.getElementById("citeDisp").innerHTML = response.Citation;
+    $("#citeDisp").html(response.Citation);
     //displays the data if it exsists.
     if(response.hasOwnProperty("data")){
         //note: publisher isn't in here since I don't know how to find it from the webpage.
-        document.getElementById("titleInput").value = response.data.Title;
-        document.getElementById("authorInput").value = response.data.Author;
+        $("#titleInput").val(response.data.Title);
+        $("#authorInput").val(response.data.Author);
         //these 2 don't work
-        document.getElementById("todaysDateInput").value = response.data.TodaysDate;
-        document.getElementById("publishedDateInput").value = response.data.PublishedDate;
+        $("#todaysDateInput").val(response.data.TodaysDate);
+        $("#publishedDateInput").val(response.data.PublishedDate);
     }
 };
 
