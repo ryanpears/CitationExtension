@@ -3,9 +3,11 @@ $(function(){//waits for everything to load
     let buttonManual = $("#manual");
     //let manualEntry = document.getElementById("manualEntries");//the entry boxes
     let manualEntry = $("#manualEntries");
+    let Inputs = $(".manualInput");
 
-    //manualEntry.style.display = "none";//default to hidden
+    //default to hidden
     manualEntry.css("display", "none");
+
     buttonMla.on("click",function(){
             //alert("this still works");
             chrome.tabs.query({currentWindow: true, active: true},
@@ -15,7 +17,7 @@ $(function(){//waits for everything to load
                 });
 
         });
-    //event not trigger anymore.
+
      buttonManual.on("click", function() {
 
         //hides the manual entries.
@@ -48,14 +50,35 @@ $(function(){//waits for everything to load
 
     });
 
-});
+    manualEntry.on("input", function(){
+        //const id = event.target.id;//don't think I need ID i think I can just send a json of everything
+        chrome.tabs.query({currentWindow: true, active: true},
+            function (tabs) {//callback after getting tab
+                let port = chrome.tabs.connect(tabs[0].id);
+                port.postMessage({command: "change",
+                    data : {
+                    Author : $("#authorInput").val(),
+                    Title : $("#titleInput").val(),
+                    Publisher : $("#publisherInput").val(),
+                    PublishedDate : $("#publishedDateInput").val(),
+                    TodaysDate : $("#todaysDateInput").val()
+                    }
+                });
+                port.onMessage.addListener(function (msg) {
 
+                    displayResponse(msg);
+                });
+            });
+    })
+
+});
 
 /**
  * displays the citation
  * @param response
  */
 function displayResponse(response){
+    alert("citation is "+ response.Citation);
     $("#citeDisp").html(response.Citation);
     //displays the data if it exsists.
     if(response.hasOwnProperty("data")){

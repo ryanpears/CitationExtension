@@ -21,14 +21,18 @@ chrome.extension.onConnect.addListener(function(port){
            case "init":
                rawPageData = getPageData();
                citation = makeMLACitation(rawPageData);
+               //formats the date to html usible format
+               rawPageData.TodaysDate = dateFormatHTML(rawPageData.TodaysDate);
+               rawPageData.PublishedDate = dateFormatHTML(rawPageData.PublishedDate);
                const citeAndData = {Citation: citation, data: rawPageData};
                port.postMessage(citeAndData);
                break;
            case "change":
                //rawPageData = getPageData();//wrong will change.
                //uses the input boxes values only.
-
-               citation = makeMLACitation(rawPageData);
+               alert("going to create citaion");
+               citation = makeMLACitation(msg.data);//not getting past here
+               alert("made citation");
                port.postMessage({Citation: citation});//shouldn't reupdate feilds
                break;
        }
@@ -48,10 +52,12 @@ function makeMLACitation(rawPageData){//CHANGE TO MAKE PASS IN A JSON OF THE RAW
     let author=authorTag==(null||undefined)?"":authorTag.content;
     let publishedDate = new Date(document.lastModified);*/
     //let rawPageData = getPageData();
-
+    alert("in makeMLACitation");
+    alert(rawPageData.Author);
     const formatAuthor = parseAuthor(rawPageData.Author);
     const formatToday = dateFormat(rawPageData.TodaysDate);
     const formatPublishedDate = dateFormat(rawPageData.PublishedDate);
+    alert("finished formating");
 
     let MLA = "";
     if(formatAuthor != "")
@@ -62,7 +68,9 @@ function makeMLACitation(rawPageData){//CHANGE TO MAKE PASS IN A JSON OF THE RAW
         MLA += formatPublishedDate+ ", "
 
     MLA += rawPageData.Url + ".";
+    alert("made citation copying then leaving ");
     copyFormatted(MLA);
+    alert("leaving makeMLACitation");
     return MLA;
 }
 
@@ -77,8 +85,7 @@ function getPageData(){
     const title = titleTag==(null||undefined)?"":titleTag;
     const authorTag=document.querySelector("[name=author]");
     const author=authorTag==(null||undefined)?"":authorTag.content;
-    const publishedDate = new Date(document.lastModified);
-
+    const publishedDate = new Date(document.lastModified);//don't know if this works
 
     return {Author: author,
         Title: title,
@@ -99,11 +106,32 @@ function dateFormat(date){
     const months = ["Jan.","Feb.","Mar.","Apr.","May","Jun.","Jul.","Aug.","Sep.","Oct.","Nov.","Dec."];
 
     month = months[date.getMonth()];
-    day = date.getDay();
+    day = date.getDate();
     year = date.getFullYear();
-    formatedDate = day+ " " + month + " " + year;
+    formatedDate = [day, month, year].join(" ");
     return formatedDate;
 
+}
+
+/**
+ * formates date in yyyy-mm-dd for html display
+ * @param date
+ * @returns {string}
+ */
+function dateFormatHTML(date){
+    if(date == (null||undefined))
+        return "";
+    let d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2)
+        month = '0' + month;
+    if (day.length < 2)
+        day = '0' + day;
+
+    return [year, month, day].join('-');
 }
 
 /**
