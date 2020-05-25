@@ -79,7 +79,7 @@ $(function(){//waits for everything to load
  * @param response
  */
 function displayResponse(response){
-    alert("citation is "+ response.Citation);
+   
     $("#citeDisp").html(response.Citation);
     //displays the data if it exsists.
     if(response.hasOwnProperty("data")){

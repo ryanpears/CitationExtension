@@ -33,7 +33,6 @@ chrome.extension.onConnect.addListener(function(port){
                msg.data.TodaysDate = makeDateFromHTML(msg.data.TodaysDate);
                msg.data.PublishedDate = makeDateFromHTML(msg.data.PublishedDate);
                citation = makeMLACitation(msg.data);//not getting past here
-               alert("made citation");
                port.postMessage({Citation: citation});//shouldn't reupdate feilds
                break;
        }
@@ -53,12 +52,9 @@ function makeMLACitation(rawPageData){//CHANGE TO MAKE PASS IN A JSON OF THE RAW
     let author=authorTag==(null||undefined)?"":authorTag.content;
     let publishedDate = new Date(document.lastModified);*/
     //let rawPageData = getPageData();
-    alert("in makeMLACitation");
-    alert(rawPageData.TodaysDate);
     const formatAuthor = parseAuthor(rawPageData.Author);
     const formatToday = dateFormat(rawPageData.TodaysDate);
     const formatPublishedDate = dateFormat(rawPageData.PublishedDate);
-    alert("finished formating");
 
     let MLA = "";
     if(formatAuthor != "")
@@ -69,9 +65,7 @@ function makeMLACitation(rawPageData){//CHANGE TO MAKE PASS IN A JSON OF THE RAW
         MLA += formatPublishedDate+ ", "
 
     MLA += rawPageData.Url + ".";
-    alert("made citation copying then leaving ");
     copyFormatted(MLA);
-    alert("leaving makeMLACitation");
     return MLA;
 }
 
