@@ -30,7 +30,8 @@ chrome.extension.onConnect.addListener(function(port){
            case "change":
                //rawPageData = getPageData();//wrong will change.
                //uses the input boxes values only.
-               alert("going to create citaion");
+               msg.data.TodaysDate = makeDateFromHTML(msg.data.TodaysDate);
+               msg.data.PublishedDate = makeDateFromHTML(msg.data.PublishedDate);
                citation = makeMLACitation(msg.data);//not getting past here
                alert("made citation");
                port.postMessage({Citation: citation});//shouldn't reupdate feilds
@@ -53,7 +54,7 @@ function makeMLACitation(rawPageData){//CHANGE TO MAKE PASS IN A JSON OF THE RAW
     let publishedDate = new Date(document.lastModified);*/
     //let rawPageData = getPageData();
     alert("in makeMLACitation");
-    alert(rawPageData.Author);
+    alert(rawPageData.TodaysDate);
     const formatAuthor = parseAuthor(rawPageData.Author);
     const formatToday = dateFormat(rawPageData.TodaysDate);
     const formatPublishedDate = dateFormat(rawPageData.PublishedDate);
@@ -92,6 +93,15 @@ function getPageData(){
         TodaysDate: todaysDate,
         PublishedDate: publishedDate,
         Url : url};
+}
+
+/**
+ * parses yyyy-MM-dd into javascript date
+ * @param date
+ */
+function makeDateFromHTML(date){
+    let split = date.split("-");
+    return new Date(split[0], split[1]-1, split[2]);
 }
 
 /**

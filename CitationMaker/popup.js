@@ -55,6 +55,7 @@ $(function(){//waits for everything to load
         chrome.tabs.query({currentWindow: true, active: true},
             function (tabs) {//callback after getting tab
                 let port = chrome.tabs.connect(tabs[0].id);
+
                 port.postMessage({command: "change",
                     data : {
                     Author : $("#authorInput").val(),
