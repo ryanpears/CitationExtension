@@ -45,7 +45,8 @@ $(function(){//waits for everything to load
                         Title : $("#titleInput").val(),
                         Publisher : $("#publisherInput").val(),
                         PublishedDate : $("#publishedDateInput").val(),
-                        TodaysDate : $("#todaysDateInput").val()
+                        TodaysDate : $("#todaysDateInput").val(),
+                        Url : $("#urlInput").val()
                     }
                 });
                 port.onMessage.addListener(function (msg) {
@@ -70,6 +71,7 @@ function displayResponse(response){
         $("#authorInput").val(response.data.Author);
         $("#todaysDateInput").val(response.data.TodaysDate);
         $("#publishedDateInput").val(response.data.PublishedDate);
+        $("#urlInput").val(response.data.Url);
     }
 }
 
