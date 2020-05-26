@@ -35,9 +35,6 @@ h1{
    background-color: black;
     width: 270px;
     height: 40px;
-    padding: 0px;
-    border: 0px;
-    margin: 0px;
     overflow: hidden;
     display: flex;
     align-items:center;
@@ -45,7 +42,7 @@ h1{
 #citeFormats{
     display: inline-block;
     width: 100vw;
-    padding: 0px 20px;
+    padding: 5px 20px;
     margin: 0px;
 }
 #citeDisp{

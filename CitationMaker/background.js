@@ -177,6 +177,7 @@ function parseAuthor(author){
 
 /**
  * creates a dummy area of the page and then copies it to the clipboard
+ * THIS CAUSES THE WEBPAGE TO FLASH Need to learn how I can fix
  * found this on https://stackoverflow.com/questions/34191780/javascript-copy-string-to-clipboard-as-text-html
  * @param html
  */
@@ -211,16 +212,16 @@ function copyFormatted (html) {
     window.getSelection().addRange(range)
 
     // [5.1]
-    document.execCommand('copy')
+    //document.execCommand('copy')
 
     // [5.2]
-    for (var i = 0; i < activeSheets.length; i++) activeSheets[i].disabled = true
+    //for (var i = 0; i < activeSheets.length; i++) activeSheets[i].disabled = true
 
     // [5.3]
     document.execCommand('copy')
 
     // [5.4]
-    for (var i = 0; i < activeSheets.length; i++) activeSheets[i].disabled = false
+    //for (var i = 0; i < activeSheets.length; i++) activeSheets[i].disabled = false
 
     // Remove the container
     // [6]
