@@ -24,6 +24,7 @@ chrome.extension.onConnect.addListener(function(port){
                //formats the date to html usible format
                rawPageData.TodaysDate = dateFormatHTML(rawPageData.TodaysDate);
                rawPageData.PublishedDate = dateFormatHTML(rawPageData.PublishedDate);
+               rawPageData.Author = parseAuthor(rawPageData.Author);
                const citeAndData = {Citation: citation, data: rawPageData};
                port.postMessage(citeAndData);
                break;
@@ -44,14 +45,7 @@ chrome.extension.onConnect.addListener(function(port){
  * @returns {string}
  */
 function makeMLACitation(rawPageData){//CHANGE TO MAKE PASS IN A JSON OF THE RAW DATA
-    /*let todaysDate = new Date();
-    let url = window.location.href;
-    let titleTag = document.title;
-    let title = titleTag==(null||undefined)?"":titleTag;
-    let authorTag=document.querySelector("[name=author]");
-    let author=authorTag==(null||undefined)?"":authorTag.content;
-    let publishedDate = new Date(document.lastModified);*/
-    //let rawPageData = getPageData();
+
     const formatAuthor = parseAuthor(rawPageData.Author);
     const formatToday = dateFormat(rawPageData.TodaysDate);
     const formatPublishedDate = dateFormat(rawPageData.PublishedDate);
@@ -59,9 +53,11 @@ function makeMLACitation(rawPageData){//CHANGE TO MAKE PASS IN A JSON OF THE RAW
     let MLA = "";
     if(formatAuthor != "")
         MLA += formatAuthor+". ";
-    if(rawPageData.Title != (null||undefined||""))
+    if(rawPageData.Title != (null && undefined && ""))
         MLA += rawPageData.Title.italics() + ". ";
-    if(formatPublishedDate != (null||undefined||""))
+    if(rawPageData.Publisher != (null && undefined &&""))
+        MLA += rawPageData.Publisher + ",";
+    if(formatPublishedDate != (null && undefined && ""))
         MLA += formatPublishedDate+ ", "
 
     MLA += rawPageData.Url + ".";
@@ -137,6 +133,7 @@ function dateFormatHTML(date){
 
     return [year, month, day].join('-');
 }
+
 
 /**
  * parses and puts the authors into MLA format

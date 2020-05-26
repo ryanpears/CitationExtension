@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="231ba804-31aa-4da3-883e-60c832654812" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CitationMaker/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/CitationMaker/background.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CitationMaker/popup.js" beforeDir="false" afterPath="$PROJECT_DIR$/CitationMaker/popup.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,7 +88,7 @@
       <workItem from="1577641883086" duration="681000" />
       <workItem from="1587748439100" duration="3000" />
       <workItem from="1588877959994" duration="4139000" />
-      <workItem from="1589387657796" duration="34484000" />
+      <workItem from="1589387657796" duration="36575000" />
     </task>
     <servers />
   </component>
