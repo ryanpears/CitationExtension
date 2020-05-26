@@ -8,17 +8,14 @@ $(function(){//waits for everything to load
     manualEntry.css("display", "none");
 
     buttonMla.on("click",function(){
-            //alert("this still works");
             chrome.tabs.query({currentWindow: true, active: true},
                 function(tabs){//callback after getting tab
-                    //alert("got the tab");
                     chrome.tabs.sendMessage(tabs[0].id,{type :"MLA"},displayResponse);
                 });
 
         });
 
      buttonManual.on("click", function() {
-
         //hides the manual entries.
         if (manualEntry.css("display") != "none") {
             manualEntry.css("display", "none");
@@ -39,22 +36,19 @@ $(function(){//waits for everything to load
     });
     //whenever a input is changed the citation is updated.
     manualEntry.on("input", function(){
-        //const id = event.target.id;//don't think I need ID i think I can just send a json of everything
         chrome.tabs.query({currentWindow: true, active: true},
             function (tabs) {//callback after getting tab
                 let port = chrome.tabs.connect(tabs[0].id);
-
                 port.postMessage({command: "change",
                     data : {
-                    Author : $("#authorInput").val(),
-                    Title : $("#titleInput").val(),
-                    Publisher : $("#publisherInput").val(),
-                    PublishedDate : $("#publishedDateInput").val(),
-                    TodaysDate : $("#todaysDateInput").val()
+                        Author : $("#authorInput").val(),
+                        Title : $("#titleInput").val(),
+                        Publisher : $("#publisherInput").val(),
+                        PublishedDate : $("#publishedDateInput").val(),
+                        TodaysDate : $("#todaysDateInput").val()
                     }
                 });
                 port.onMessage.addListener(function (msg) {
-
                     displayResponse(msg);
                 });
             });
@@ -77,5 +71,5 @@ function displayResponse(response){
         $("#todaysDateInput").val(response.data.TodaysDate);
         $("#publishedDateInput").val(response.data.PublishedDate);
     }
-};
+}
 

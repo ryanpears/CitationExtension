@@ -5,7 +5,7 @@
 body{
    /* min-height: 350px;
     width: 250px;*/
-    max-width:250px;
+    max-width:270px;
     background-color: ghostwhite;
 }
 li{
@@ -16,6 +16,7 @@ h1{
     color: ghostwhite;
     font-size: 40px;
 }
+
 .citationSelection{
     width: 60px;
     height: 40px;
@@ -32,12 +33,14 @@ h1{
 
 #titleDiv{
    background-color: black;
-    width: 97vw;
-    height: 7vw;
+    width: 270px;
+    height: 40px;
     padding: 0px;
     border: 0px;
     margin: 0px;
     overflow: hidden;
+    display: flex;
+    align-items:center;
 }
 #citeFormats{
     display: inline-block;
