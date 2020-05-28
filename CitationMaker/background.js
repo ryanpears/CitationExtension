@@ -1,38 +1,97 @@
+/**
+ * this opens a one time connection to popup.js
+ */
 chrome.runtime.onMessage.addListener(async function(request,sender, sendResponse){
     //can add switchstatement for the request to support mulitple formats
-    const data = makeMLACitation();
-    sendResponse({citation: data});
+    let rawPageData = getPageData();
+    const data = makeMLACitation(rawPageData);
+    sendResponse({Citation: data});
     return true; //tells chrome this is async
+});
+
+/**
+ * this opens up a long lived connection to popup.js
+ */
+chrome.extension.onConnect.addListener(function(port){
+    //alert("in background.js connected");
+    port.onMessage.addListener(function(msg){
+        let rawPageData;
+        let citation;
+       switch(msg.command){
+           case "init":
+               rawPageData = getPageData();
+               citation = makeMLACitation(rawPageData);
+               //formats the date to html usible format
+               rawPageData.TodaysDate = dateFormatHTML(rawPageData.TodaysDate);
+               rawPageData.PublishedDate = dateFormatHTML(rawPageData.PublishedDate);
+               rawPageData.Author = parseAuthor(rawPageData.Author);
+               const citeAndData = {Citation: citation, data: rawPageData};
+               port.postMessage(citeAndData);
+               break;
+           case "change":
+               //rawPageData = getPageData();//wrong will change.
+               //uses the input boxes values only.
+               msg.data.TodaysDate = makeDateFromHTML(msg.data.TodaysDate);
+               msg.data.PublishedDate = makeDateFromHTML(msg.data.PublishedDate);
+               citation = makeMLACitation(msg.data);//not getting past here
+               port.postMessage({Citation: citation});//shouldn't reupdate feilds
+               break;
+       }
+    });
 });
 
 /**
  * collects data from current tab and creates MLA citation
  * @returns {string}
  */
-makeMLACitation = function(){
-    let todaysDate = new Date();
-    let url = window.location.href;
-    let titleTag = document.title;
-    let title = titleTag==(null||undefined)?"":titleTag;
-    let authorTag=document.querySelector("[name=author]");
-    let author=authorTag==(null||undefined)?"":authorTag.content;
-    let publishedDate = new Date(document.lastModified);
+function makeMLACitation(rawPageData){//CHANGE TO MAKE PASS IN A JSON OF THE RAW DATA
 
-    const formatAuthor = parseAuthor(author);
-    const formatToday = dateFormat(todaysDate);
-    const formatPublishedDate = dateFormat(publishedDate);
+    const formatAuthor = parseAuthor(rawPageData.Author);
+    const formatToday = dateFormat(rawPageData.TodaysDate);
+    const formatPublishedDate = dateFormat(rawPageData.PublishedDate);
 
     let MLA = "";
     if(formatAuthor != "")
         MLA += formatAuthor+". ";
-    if(title != (null||undefined||""))
-        MLA += title.italics() + ". ";
-    if(formatPublishedDate != (null||undefined||""))
+    if(rawPageData.Title != (null && undefined && ""))
+        MLA += rawPageData.Title.italics() + ". ";
+    if(rawPageData.Publisher != (null && undefined &&""))
+        MLA += rawPageData.Publisher + ",";
+    if(formatPublishedDate != (null && undefined && ""))
         MLA += formatPublishedDate+ ", "
 
-    MLA += url + ".";
-    copyFormatted(MLA);//hopefully this works
+    MLA += rawPageData.Url + ".";
+    copyFormatted(MLA);
     return MLA;
+}
+
+/**
+ * gets the data from the webpage unfomated.
+ * @returns {{TodaysDate: *, Author: *, Title: (string|string), PublishedDate: *, Url: string}}
+ */
+function getPageData(){
+    const todaysDate = new Date();
+    const url = window.location.href;
+    const titleTag = document.title;
+    const title = titleTag==(null||undefined)?"":titleTag;
+    const authorTag=document.querySelector("[name=author]");
+    const author=authorTag==(null||undefined)?"":authorTag.content;
+    const publishedDate = new Date(document.lastModified);//don't know if this works
+
+    return {Author: author,
+        Title: title,
+        TodaysDate: todaysDate,
+        PublishedDate: publishedDate,
+        Url : url};
+}
+
+/**
+ * parses yyyy-MM-dd into javascript date
+ * @param date
+ */
+function makeDateFromHTML(date){
+    let split = date.split("-");
+    return new Date(split[0], split[1]-1, split[2]);
 }
 
 /**
@@ -40,26 +99,48 @@ makeMLACitation = function(){
  * @param date
  * @returns {*}
  */
-dateFormat = function(date){
+function dateFormat(date){
     if(date == (null||undefined))
         return "";
     let month, year, day, formatedDate;
     const months = ["Jan.","Feb.","Mar.","Apr.","May","Jun.","Jul.","Aug.","Sep.","Oct.","Nov.","Dec."];
 
     month = months[date.getMonth()];
-    day = date.getDay();
+    day = date.getDate();
     year = date.getFullYear();
-    formatedDate = day+ " " + month + " " + year;
+    formatedDate = [day, month, year].join(" ");
     return formatedDate;
 
 }
+
+/**
+ * formates date in yyyy-mm-dd for html display
+ * @param date
+ * @returns {string}
+ */
+function dateFormatHTML(date){
+    if(date == (null||undefined))
+        return "";
+    let d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2)
+        month = '0' + month;
+    if (day.length < 2)
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+
 
 /**
  * parses and puts the authors into MLA format
  * @param author
  * @returns {*}
  */
-parseAuthor = function(author){
+function parseAuthor(author){
     if(author == undefined || author == null)//sometimes there is an author tag but no content.
         return "";
     const HTMLTag = /(<([^>]+)>)/ig;
@@ -96,6 +177,7 @@ parseAuthor = function(author){
 
 /**
  * creates a dummy area of the page and then copies it to the clipboard
+ * THIS CAUSES THE WEBPAGE TO FLASH Need to learn how I can fix
  * found this on https://stackoverflow.com/questions/34191780/javascript-copy-string-to-clipboard-as-text-html
  * @param html
  */
@@ -130,16 +212,16 @@ function copyFormatted (html) {
     window.getSelection().addRange(range)
 
     // [5.1]
-    document.execCommand('copy')
+    //document.execCommand('copy')
 
     // [5.2]
-    for (var i = 0; i < activeSheets.length; i++) activeSheets[i].disabled = true
+    //for (var i = 0; i < activeSheets.length; i++) activeSheets[i].disabled = true
 
     // [5.3]
     document.execCommand('copy')
 
     // [5.4]
-    for (var i = 0; i < activeSheets.length; i++) activeSheets[i].disabled = false
+    //for (var i = 0; i < activeSheets.length; i++) activeSheets[i].disabled = false
 
     // Remove the container
     // [6]
