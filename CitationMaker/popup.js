@@ -10,7 +10,7 @@ $(function(){//waits for everything to load
     buttonMla.on("click",function(){
             chrome.tabs.query({currentWindow: true, active: true},
                 function(tabs){//callback after getting tab
-                    chrome.tabs.sendMessage(tabs[0].id,{type :"MLA"},displayResponse);
+                    chrome.tabs.sendMessage(tabs[0].id,{command :"MLA"},displayResponse);
                 });
 
         });
@@ -41,12 +41,12 @@ $(function(){//waits for everything to load
                 let port = chrome.tabs.connect(tabs[0].id);
                 port.postMessage({command: "change",
                     data : {
-                        Author : $("#authorInput").val(),
-                        Title : $("#titleInput").val(),
-                        Publisher : $("#publisherInput").val(),
-                        PublishedDate : $("#publishedDateInput").val(),
-                        TodaysDate : $("#todaysDateInput").val(),
-                        Url : $("#urlInput").val()
+                        author : $("#authorInput").val(),
+                        title : $("#titleInput").val(),
+                        publisher : $("#publisherInput").val(),
+                        publishedDate : $("#publishedDateInput").val(),
+                        todaysDate : $("#todaysDateInput").val(),
+                        url : $("#urlInput").val()
                     }
                 });
                 port.onMessage.addListener(function (msg) {
@@ -63,15 +63,15 @@ $(function(){//waits for everything to load
  */
 function displayResponse(response){
 
-    $("#citeDisp").html(response.Citation);
+    $("#citeDisp").html(response.citation);
     //displays the data if it exists.
     if(response.hasOwnProperty("data")){
         //note: publisher isn't in here since I don't know how to find it from the webpage.
-        $("#titleInput").val(response.data.Title);
-        $("#authorInput").val(response.data.Author);
-        $("#todaysDateInput").val(response.data.TodaysDate);
-        $("#publishedDateInput").val(response.data.PublishedDate);
-        $("#urlInput").val(response.data.Url);
+        $("#titleInput").val(response.data.title);
+        $("#authorInput").val(response.data.author);
+        $("#todaysDateInput").val(response.data.todaysDate);
+        $("#publishedDateInput").val(response.data.publishedDate);
+        $("#urlInput").val(response.data.url);
     }
 }
 

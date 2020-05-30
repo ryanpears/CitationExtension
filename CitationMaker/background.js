@@ -2,10 +2,17 @@
  * this opens a one time connection to popup.js
  */
 chrome.runtime.onMessage.addListener(async function(request,sender, sendResponse){
-    //can add switchstatement for the request to support mulitple formats
-    let rawPageData = getPageData();
-    const data = makeMLACitation(rawPageData);
-    sendResponse({Citation: data});
+    //expand switch statement to allow multiple formats
+    switch(request.command){
+        case "MLA":
+            let rawPageData = getPageData();
+            const data = makeMLACitation(rawPageData);
+            sendResponse({citation: data});
+            break;
+        default:
+            alert("invalid format");
+            sendResponse({citation: null});//shouldn't ever happen
+    }
     return true; //tells chrome this is async
 });
 
@@ -22,19 +29,19 @@ chrome.extension.onConnect.addListener(function(port){
                rawPageData = getPageData();
                citation = makeMLACitation(rawPageData);
                //formats the date to html usible format
-               rawPageData.TodaysDate = dateFormatHTML(rawPageData.TodaysDate);
-               rawPageData.PublishedDate = dateFormatHTML(rawPageData.PublishedDate);
-               rawPageData.Author = parseAuthor(rawPageData.Author);
-               const citeAndData = {Citation: citation, data: rawPageData};
+               rawPageData.TodaysDate = dateFormatHTML(rawPageData.todaysDate);
+               rawPageData.PublishedDate = dateFormatHTML(rawPageData.publishedDate);
+               rawPageData.Author = parseAuthor(rawPageData.author);
+               const citeAndData = {citation: citation, data: rawPageData};
                port.postMessage(citeAndData);
                break;
            case "change":
                //rawPageData = getPageData();//wrong will change.
                //uses the input boxes values only.
-               msg.data.TodaysDate = makeDateFromHTML(msg.data.TodaysDate);
-               msg.data.PublishedDate = makeDateFromHTML(msg.data.PublishedDate);
+               msg.data.todaysDate = makeDateFromHTML(msg.data.todaysDate);
+               msg.data.publishedDate = makeDateFromHTML(msg.data.publishedDate);
                citation = makeMLACitation(msg.data);//not getting past here
-               port.postMessage({Citation: citation});//shouldn't reupdate feilds
+               port.postMessage({citation: citation});//shouldn't reupdate feilds
                break;
        }
     });
@@ -46,28 +53,28 @@ chrome.extension.onConnect.addListener(function(port){
  */
 function makeMLACitation(rawPageData){//CHANGE TO MAKE PASS IN A JSON OF THE RAW DATA
 
-    const formatAuthor = parseAuthor(rawPageData.Author);
-    const formatToday = dateFormat(rawPageData.TodaysDate);
-    const formatPublishedDate = dateFormat(rawPageData.PublishedDate);
+    const formatAuthor = parseAuthor(rawPageData.author);
+    const formatToday = dateFormat(rawPageData.todaysDate);
+    const formatPublishedDate = dateFormat(rawPageData.publishedDate);
 
     let MLA = "";
-    if(formatAuthor != "")
+    if(formatAuthor != (null && undefined && ""))
         MLA += formatAuthor+". ";
-    if(rawPageData.Title != (null && undefined && ""))
-        MLA += rawPageData.Title.italics() + ". ";
-    if(rawPageData.Publisher != (null && undefined &&""))
-        MLA += rawPageData.Publisher + ",";
+    if(rawPageData.title != (null && undefined && ""))
+        MLA += rawPageData.title.italics() + ". ";
+    if(rawPageData.publisher != (null && undefined &&""))
+        MLA += rawPageData.publisher + ",";
     if(formatPublishedDate != (null && undefined && ""))
         MLA += formatPublishedDate+ ", "
 
-    MLA += rawPageData.Url + ".";
+    MLA += rawPageData.url + ".";
     copyFormatted(MLA);
     return MLA;
 }
 
 /**
- * gets the data from the webpage unfomated.
- * @returns {{TodaysDate: *, Author: *, Title: (string|string), PublishedDate: *, Url: string}}
+ * gets unformated information of webpage.
+ * @returns {{todaysDate: Date, author: string, publishedDate: Date, title: (string|string), url: string}}
  */
 function getPageData(){
     const todaysDate = new Date();
@@ -78,11 +85,11 @@ function getPageData(){
     const author=authorTag==(null||undefined)?"":authorTag.content;
     const publishedDate = new Date(document.lastModified);//don't know if this works
 
-    return {Author: author,
-        Title: title,
-        TodaysDate: todaysDate,
-        PublishedDate: publishedDate,
-        Url : url};
+    return {author: author,
+        title: title,
+        todaysDate: todaysDate,
+        publishedDate: publishedDate,
+        url : url};
 }
 
 /**
@@ -165,9 +172,11 @@ function parseAuthor(author){
             }
         }
     }
-    var ret;
+    let ret = "";
     if(formatedAuthors.length > 2){
         ret = formatedAuthors[0]+" et al";
+    }else if(formatedAuthors.length == 0){
+        ret = null;
     }else{
         formatedAuthors.sort();//sorts the authors.
         ret = formatedAuthors.join(" and ");
