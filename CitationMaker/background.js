@@ -29,9 +29,10 @@ chrome.extension.onConnect.addListener(function(port){
                rawPageData = getPageData();
                citation = makeMLACitation(rawPageData);
                //formats the date to html usible format
-               rawPageData.TodaysDate = dateFormatHTML(rawPageData.todaysDate);
-               rawPageData.PublishedDate = dateFormatHTML(rawPageData.publishedDate);
-               rawPageData.Author = parseAuthor(rawPageData.author);
+               rawPageData.todaysDate = dateFormatHTML(rawPageData.todaysDate);
+               rawPageData.publishedDate = dateFormatHTML(rawPageData.publishedDate);
+               rawPageData.author = parseAuthor(rawPageData.author);
+                //alert("Todays date is "+ rawPageData.todaysDate);
                const citeAndData = {citation: citation, data: rawPageData};
                port.postMessage(citeAndData);
                break;
@@ -39,6 +40,7 @@ chrome.extension.onConnect.addListener(function(port){
                //rawPageData = getPageData();//wrong will change.
                //uses the input boxes values only.
                msg.data.todaysDate = makeDateFromHTML(msg.data.todaysDate);
+               //alert(msg.data.todaysDate);
                msg.data.publishedDate = makeDateFromHTML(msg.data.publishedDate);
                citation = makeMLACitation(msg.data);//not getting past here
                port.postMessage({citation: citation});//shouldn't reupdate feilds
@@ -56,16 +58,17 @@ function makeMLACitation(rawPageData){//CHANGE TO MAKE PASS IN A JSON OF THE RAW
     const formatAuthor = parseAuthor(rawPageData.author);
     const formatToday = dateFormat(rawPageData.todaysDate);
     const formatPublishedDate = dateFormat(rawPageData.publishedDate);
+    alert(rawPageData.publisher);
 
     let MLA = "";
     if(formatAuthor != (null && undefined && ""))
         MLA += formatAuthor+". ";
     if(rawPageData.title != (null && undefined && ""))
         MLA += rawPageData.title.italics() + ". ";
-    if(rawPageData.publisher != (null && undefined &&""))
+    if(rawPageData.publisher != (null && undefined && ""))
         MLA += rawPageData.publisher + ",";
     if(formatPublishedDate != (null && undefined && ""))
-        MLA += formatPublishedDate+ ", "
+        MLA += formatPublishedDate+ ", ";
 
     MLA += rawPageData.url + ".";
     copyFormatted(MLA);
