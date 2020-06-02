@@ -43,11 +43,11 @@ $(function(){//waits for everything to load
                 //know that they are empty strings at this point.
                 port.postMessage({command: "change",
                     data : {
+                        todaysDate : $("#todaysDateInput").val(),
                         author : getManualData("#authorInput"),
                         title : getManualData("#titleInput"),
                         publisher : getManualData("#publisherInput"),
                         publishedDate : $("#publishedDateInput").val(),
-                        todaysDate : $("#todaysDateInput").val(),
                         url : getManualData("#urlInput")
                     }
                 });
@@ -67,7 +67,7 @@ $(function(){//waits for everything to load
  * @returns {*}
  */
 function getManualData(selector){
-   return $(selector).val() == "" ? undefined : $(selector).val();
+   return $(selector).val() == "" ? null : $(selector).val();
 }
 
 /**

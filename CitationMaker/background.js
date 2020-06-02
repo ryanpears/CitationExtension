@@ -53,12 +53,14 @@ chrome.extension.onConnect.addListener(function(port){
  * @returns {string}
  */
 function makeMLACitation(rawPageData){
-
+    //alert("going to format author");
     const formatAuthor = parseAuthor(rawPageData.author);
+    //alert("author formated");
     const formatToday = dateFormat(rawPageData.todaysDate);
     const formatPublishedDate = dateFormat(rawPageData.publishedDate);
 
     //builds the citation might not need the empty string check since in 90% sure it doesn't work
+    //alert("building citation");// i think a null author crashes this
     let MLA = "";
     if(formatAuthor != (null && undefined && ""))
         MLA += formatAuthor+". ";
@@ -150,7 +152,7 @@ function dateFormatHTML(date){
  * @returns {*}
  */
 function parseAuthor(author){
-    if(author == (undefined || null || ""))//sometimes there is an author tag but no content.
+    if(author == (undefined || null) || author === "")//sometimes there is an author tag but no content.
         return null;
     const HTMLTag = /(<([^>]+)>)/ig;
     author = author.replace(HTMLTag, "");//delete any stray HTML tags
