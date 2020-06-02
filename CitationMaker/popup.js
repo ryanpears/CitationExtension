@@ -22,6 +22,7 @@ $(function(){//waits for everything to load
         } else {
             //this may change not sure the best one yet grid or table could work
             manualEntry.css("display", "block");
+            $("#publisherInput").val("");
         }
         //opens the connection to the background.
         chrome.tabs.query({currentWindow: true, active: true},
@@ -39,16 +40,18 @@ $(function(){//waits for everything to load
         chrome.tabs.query({currentWindow: true, active: true},
             function (tabs) {//callback after getting tab
                 let port = chrome.tabs.connect(tabs[0].id);
+                //know that they are empty strings at this point.
                 port.postMessage({command: "change",
                     data : {
-                        author : $("#authorInput").val(),
-                        title : $("#titleInput").val(),
-                        publisher : $("#publisherInput").val(),
+                        author : getManualData("#authorInput"),
+                        title : getManualData("#titleInput"),
+                        publisher : getManualData("#publisherInput"),
                         publishedDate : $("#publishedDateInput").val(),
                         todaysDate : $("#todaysDateInput").val(),
-                        url : $("#urlInput").val()
+                        url : getManualData("#urlInput")
                     }
                 });
+               // alert("message sent");
                 port.onMessage.addListener(function (msg) {
                     displayResponse(msg);
                 });
@@ -56,6 +59,16 @@ $(function(){//waits for everything to load
     })
 
 });
+
+/**
+ * returns value of input tag or null if empty
+ * JSON has trouble with empty strings so this is a workaround
+ * @param selector
+ * @returns {*}
+ */
+function getManualData(selector){
+   return $(selector).val() == "" ? undefined : $(selector).val();
+}
 
 /**
  * displays the citation

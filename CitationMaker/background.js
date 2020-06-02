@@ -40,10 +40,9 @@ chrome.extension.onConnect.addListener(function(port){
                //rawPageData = getPageData();//wrong will change.
                //uses the input boxes values only.
                msg.data.todaysDate = makeDateFromHTML(msg.data.todaysDate);
-               //alert(msg.data.todaysDate);
                msg.data.publishedDate = makeDateFromHTML(msg.data.publishedDate);
-               citation = makeMLACitation(msg.data);//not getting past here
-               port.postMessage({citation: citation});//shouldn't reupdate feilds
+               citation = makeMLACitation(msg.data);
+               port.postMessage({citation: citation});//shouldn't reupdate fields
                break;
        }
     });
@@ -53,13 +52,13 @@ chrome.extension.onConnect.addListener(function(port){
  * collects data from current tab and creates MLA citation
  * @returns {string}
  */
-function makeMLACitation(rawPageData){//CHANGE TO MAKE PASS IN A JSON OF THE RAW DATA
+function makeMLACitation(rawPageData){
 
     const formatAuthor = parseAuthor(rawPageData.author);
     const formatToday = dateFormat(rawPageData.todaysDate);
     const formatPublishedDate = dateFormat(rawPageData.publishedDate);
-    alert(rawPageData.publisher);
 
+    //builds the citation might not need the empty string check since in 90% sure it doesn't work
     let MLA = "";
     if(formatAuthor != (null && undefined && ""))
         MLA += formatAuthor+". ";
@@ -111,7 +110,7 @@ function makeDateFromHTML(date){
  */
 function dateFormat(date){
     if(date == (null||undefined))
-        return "";
+        return null;
     let month, year, day, formatedDate;
     const months = ["Jan.","Feb.","Mar.","Apr.","May","Jun.","Jul.","Aug.","Sep.","Oct.","Nov.","Dec."];
 
@@ -130,7 +129,7 @@ function dateFormat(date){
  */
 function dateFormatHTML(date){
     if(date == (null||undefined))
-        return "";
+        return null;
     let d = new Date(date),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
@@ -151,8 +150,8 @@ function dateFormatHTML(date){
  * @returns {*}
  */
 function parseAuthor(author){
-    if(author == undefined || author == null)//sometimes there is an author tag but no content.
-        return "";
+    if(author == (undefined || null || ""))//sometimes there is an author tag but no content.
+        return null;
     const HTMLTag = /(<([^>]+)>)/ig;
     author = author.replace(HTMLTag, "");//delete any stray HTML tags
     const byStr = /.*[^\Wby\W]*\Wby\W|^([^by\W]*by\W)/i;
