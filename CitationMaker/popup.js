@@ -43,15 +43,14 @@ $(function(){//waits for everything to load
                 //know that they are empty strings at this point.
                 port.postMessage({command: "change",
                     data : {
-                        todaysDate : $("#todaysDateInput").val(),
                         author : getManualData("#authorInput"),
                         title : getManualData("#titleInput"),
                         publisher : getManualData("#publisherInput"),
                         publishedDate : $("#publishedDateInput").val(),
+                        todaysDate : $("#todaysDateInput").val(),
                         url : getManualData("#urlInput")
                     }
                 });
-               // alert("message sent");
                 port.onMessage.addListener(function (msg) {
                     displayResponse(msg);
                 });
@@ -79,7 +78,6 @@ function displayResponse(response){
     $("#citeDisp").html(response.citation);
     //displays the data if it exists.
     if(response.hasOwnProperty("data")){
-        //note: publisher isn't in here since I don't know how to find it from the webpage.
         $("#titleInput").val(response.data.title);
         $("#authorInput").val(response.data.author);
         $("#todaysDateInput").val(response.data.todaysDate);

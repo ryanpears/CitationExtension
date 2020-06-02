@@ -53,22 +53,19 @@ chrome.extension.onConnect.addListener(function(port){
  * @returns {string}
  */
 function makeMLACitation(rawPageData){
-    //alert("going to format author");
     const formatAuthor = parseAuthor(rawPageData.author);
-    //alert("author formated");
     const formatToday = dateFormat(rawPageData.todaysDate);
     const formatPublishedDate = dateFormat(rawPageData.publishedDate);
 
-    //builds the citation might not need the empty string check since in 90% sure it doesn't work
-    //alert("building citation");// i think a null author crashes this
+    //builds the citation
     let MLA = "";
-    if(formatAuthor != (null && undefined && ""))
+    if(formatAuthor != (null && undefined))
         MLA += formatAuthor+". ";
-    if(rawPageData.title != (null && undefined && ""))
+    if(rawPageData.title != (null && undefined))
         MLA += rawPageData.title.italics() + ". ";
-    if(rawPageData.publisher != (null && undefined && ""))
+    if(rawPageData.publisher != (null && undefined))
         MLA += rawPageData.publisher + ",";
-    if(formatPublishedDate != (null && undefined && ""))
+    if(formatPublishedDate != (null && undefined))
         MLA += formatPublishedDate+ ", ";
 
     MLA += rawPageData.url + ".";
