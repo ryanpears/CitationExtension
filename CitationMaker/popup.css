@@ -52,5 +52,13 @@ h1{
     bottom:20px;
     font-size: 8px;
 }
-
+#titleInput{
+    width: 200px;
+}
+#authorInput{
+    width: 160px;
+}
+#urlInput{
+    width: 220px;
+}
 

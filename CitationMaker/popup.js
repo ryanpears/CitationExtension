@@ -10,7 +10,7 @@ $(function(){//waits for everything to load
     buttonMla.on("click",function(){
             chrome.tabs.query({currentWindow: true, active: true},
                 function(tabs){//callback after getting tab
-                    chrome.tabs.sendMessage(tabs[0].id,{type :"MLA"},displayResponse);
+                    chrome.tabs.sendMessage(tabs[0].id,{command :"MLA"},displayResponse);
                 });
 
         });
@@ -22,6 +22,7 @@ $(function(){//waits for everything to load
         } else {
             //this may change not sure the best one yet grid or table could work
             manualEntry.css("display", "block");
+            $("#publisherInput").val("");
         }
         //opens the connection to the background.
         chrome.tabs.query({currentWindow: true, active: true},
@@ -39,14 +40,15 @@ $(function(){//waits for everything to load
         chrome.tabs.query({currentWindow: true, active: true},
             function (tabs) {//callback after getting tab
                 let port = chrome.tabs.connect(tabs[0].id);
+                //know that they are empty strings at this point.
                 port.postMessage({command: "change",
                     data : {
-                        Author : $("#authorInput").val(),
-                        Title : $("#titleInput").val(),
-                        Publisher : $("#publisherInput").val(),
-                        PublishedDate : $("#publishedDateInput").val(),
-                        TodaysDate : $("#todaysDateInput").val(),
-                        Url : $("#urlInput").val()
+                        author : getManualData("#authorInput"),
+                        title : getManualData("#titleInput"),
+                        publisher : getManualData("#publisherInput"),
+                        publishedDate : $("#publishedDateInput").val(),
+                        todaysDate : $("#todaysDateInput").val(),
+                        url : getManualData("#urlInput")
                     }
                 });
                 port.onMessage.addListener(function (msg) {
@@ -58,20 +60,29 @@ $(function(){//waits for everything to load
 });
 
 /**
+ * returns value of input tag or null if empty
+ * JSON has trouble with empty strings so this is a workaround
+ * @param selector
+ * @returns {*}
+ */
+function getManualData(selector){
+   return $(selector).val() == "" ? null : $(selector).val();
+}
+
+/**
  * displays the citation
  * @param response
  */
 function displayResponse(response){
 
-    $("#citeDisp").html(response.Citation);
+    $("#citeDisp").html(response.citation);
     //displays the data if it exists.
     if(response.hasOwnProperty("data")){
-        //note: publisher isn't in here since I don't know how to find it from the webpage.
-        $("#titleInput").val(response.data.Title);
-        $("#authorInput").val(response.data.Author);
-        $("#todaysDateInput").val(response.data.TodaysDate);
-        $("#publishedDateInput").val(response.data.PublishedDate);
-        $("#urlInput").val(response.data.Url);
+        $("#titleInput").val(response.data.title);
+        $("#authorInput").val(response.data.author);
+        $("#todaysDateInput").val(response.data.todaysDate);
+        $("#publishedDateInput").val(response.data.publishedDate);
+        $("#urlInput").val(response.data.url);
     }
 }
 
